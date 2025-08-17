@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { Scene } from '@stickman/schema';
 import { parseScene } from '@stickman/schema';
 import { Player } from '@stickman/engine';
@@ -7,6 +7,7 @@ import { CanvasView } from './components/CanvasView';
 import { Timeline } from './components/Timeline';
 import { Controls } from './components/Controls';
 import { PromptPanel } from './components/PromptPanel';
+import { generateSceneFromPrompt } from './lib/generate';
 
 export function App(): JSX.Element {
 	const [scene, setScene] = useState<Scene | null>(null);
@@ -14,6 +15,8 @@ export function App(): JSX.Element {
 	const [playing, setPlaying] = useState(false);
 	const [loop, setLoop] = useState(true);
 	const [onionSkin, setOnionSkin] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 	const playerRef = useRef<Player | null>(null);
 
 	// Initialize with a default scene for convenience
@@ -26,14 +29,21 @@ export function App(): JSX.Element {
 		if (playerRef.current) playerRef.current.onionSkin = onionSkin;
 	}, [onionSkin]);
 
-	const handleGenerate = (text: string) => {
-		const s = buildThrowScene(text);
-		const { data } = parseScene(s);
-		setScene(data);
-		setCurrentFrame(0);
-		setPlaying(false);
-		playerRef.current?.pause();
-		playerRef.current?.goto(0);
+	const handleGenerate = async (text: string) => {
+		setLoading(true);
+		setError(null);
+		try {
+			const data = await generateSceneFromPrompt(text);
+			setScene(data);
+			setCurrentFrame(0);
+			setPlaying(false);
+			playerRef.current?.pause();
+			playerRef.current?.goto(0);
+		} catch (e: any) {
+			setError(e?.message ?? 'Unbekannter Fehler');
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const handleExport = () => {
@@ -48,14 +58,18 @@ export function App(): JSX.Element {
 	};
 
 	const handleImport = async (file: File) => {
-		const text = await file.text();
-		const json = JSON.parse(text);
-		const { data } = parseScene(json);
-		setScene(data);
-		setCurrentFrame(0);
-		setPlaying(false);
-		playerRef.current?.pause();
-		playerRef.current?.goto(0);
+		try {
+			const text = await file.text();
+			const json = JSON.parse(text);
+			const { data } = parseScene(json);
+			setScene(data);
+			setCurrentFrame(0);
+			setPlaying(false);
+			playerRef.current?.pause();
+			playerRef.current?.goto(0);
+		} catch (e: any) {
+			setError(e?.message ?? 'Import fehlgeschlagen');
+		}
 	};
 
 	const onReadyPlayer = (player: Player) => {
@@ -81,6 +95,9 @@ export function App(): JSX.Element {
 			{scene && (
 				<CanvasView scene={scene} currentFrame={currentFrame} onReady={onReadyPlayer} />
 			)}
+			{error && (
+				<div style={{ color: '#b00' }}>Fehler: {error}</div>
+			)}
 			<Controls
 				playing={playing}
 				onPlayPause={() => setPlaying((p) => !p)}
@@ -94,6 +111,7 @@ export function App(): JSX.Element {
 			/>
 			<Timeline current={currentFrame} onSelect={setCurrentFrame} />
 			<PromptPanel onGenerate={handleGenerate} />
+			{loading && <div>Erzeuge Szene...</div>}
 		</div>
 	);
 }
