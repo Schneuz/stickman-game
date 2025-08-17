@@ -13,6 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: No pnpm project detected, skip build
+        if: ${{ hashFiles('**/pnpm-lock.yaml') == '' }}
+        run: echo "No pnpm lockfile found. Skipping install/build/lint/test steps."
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -20,6 +24,7 @@ jobs:
           run_install: false
 
       - name: Setup Node.js
+        if: ${{ hashFiles('**/pnpm-lock.yaml') != '' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -28,19 +33,24 @@ jobs:
             **/pnpm-lock.yaml
 
       - name: Install dependencies
+        if: ${{ hashFiles('**/pnpm-lock.yaml') != '' }}
         run: pnpm install --frozen-lockfile
 
       - name: Build
+        if: ${{ hashFiles('**/pnpm-lock.yaml') != '' }}
         run: pnpm run build
 
       - name: Typecheck
+        if: ${{ hashFiles('**/pnpm-lock.yaml') != '' }}
         run: pnpm run typecheck
         continue-on-error: true
 
       - name: Lint
+        if: ${{ hashFiles('**/pnpm-lock.yaml') != '' }}
         run: pnpm run lint
         continue-on-error: true
 
       - name: Test
+        if: ${{ hashFiles('**/pnpm-lock.yaml') != '' }}
         run: pnpm run test --if-present
         continue-on-error: true
