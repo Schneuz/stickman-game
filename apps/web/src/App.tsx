@@ -110,7 +110,7 @@ export function App(): JSX.Element {
 				onImport={handleImport}
 			/>
 			<Timeline current={currentFrame} onSelect={setCurrentFrame} />
-			<PromptPanel onGenerate={handleGenerate} />
+			<PromptPanel onGenerate={handleGenerate} loading={loading} />
 			{loading && <div>Erzeuge Szene...</div>}
 		</div>
 	);

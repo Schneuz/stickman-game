@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
+		"dev": "pnpm -r -F @stickman/schema -F @stickman/engine -F @stickman/patterns build && vite",
 		"build": "vite build",
 		"preview": "vite preview",
 		"typecheck": "tsc -p tsconfig.json --noEmit",

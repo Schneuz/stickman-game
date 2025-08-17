@@ -8,7 +8,7 @@
     "build": "pnpm -r --parallel build",
     "typecheck": "pnpm -r --parallel typecheck",
     "lint": "pnpm -r --parallel lint",
-    "test": "vitest run",
+    "test": "pnpm -r --parallel build && vitest run -c tests/vitest.config.ts",
     "test:e2e": "playwright test",
     "format": "prettier --write ."
   },
@@ -21,7 +21,7 @@
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5",
-    "playwright": "^1.47.1"
+    "@playwright/test": "^1.47.1"
   },
   "engines": {
     "node": ">=20"
