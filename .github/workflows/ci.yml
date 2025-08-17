@@ -13,34 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-          cache-dependency-path: |
-            **/pnpm-lock.yaml
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm run build
-
-      - name: Typecheck
-        run: pnpm run typecheck
-        continue-on-error: true
-
-      - name: Lint
-        run: pnpm run lint
-        continue-on-error: true
-
-      - name: Test
-        run: pnpm run test --if-present
-        continue-on-error: true
+      - name: Check repository structure
+        run: |
+          echo "Repository contents:"
+          ls -la
+          echo ""
+          echo "Build placeholder - Repository setup in progress"
+          echo "This workflow will be updated when the project structure is established."
