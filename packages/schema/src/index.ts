@@ -84,9 +84,23 @@ const jointNames: JointName[] = [
 	'footR',
 ];
 
-const poseSchema: z.ZodType<Pose> = z.object(
-	Object.fromEntries(jointNames.map((j) => [j, vec2Schema])) as Record<JointName, z.ZodTypeAny>,
-);
+const poseSchema = z.object({
+	head: vec2Schema,
+	neck: vec2Schema,
+	shoulderL: vec2Schema,
+	shoulderR: vec2Schema,
+	elbowL: vec2Schema,
+	elbowR: vec2Schema,
+	handL: vec2Schema,
+	handR: vec2Schema,
+	pelvis: vec2Schema,
+	hipL: vec2Schema,
+	hipR: vec2Schema,
+	kneeL: vec2Schema,
+	kneeR: vec2Schema,
+	footL: vec2Schema,
+	footR: vec2Schema,
+}) satisfies z.ZodType<Pose>;
 
 const objStatusSchema = z.enum(['attached', 'flying', 'destroyed', 'fallen', 'idle']);
 

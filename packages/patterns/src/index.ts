@@ -1,4 +1,4 @@
-import { parseScene, type Scene, type Pose, type Frame, type FrameObjectState } from '@stickman/schema';
+import { parseScene, type Scene, type Pose, type Frame, type FrameObjectState, type Vec2, type SceneObject } from '@stickman/schema';
 
 const CANVAS_W = 640;
 const CANVAS_H = 400;
@@ -41,7 +41,7 @@ function clonePose(p: Pose): Pose {
 	return JSON.parse(JSON.stringify(p));
 }
 
-function makeFrame(actors: { name: string; pose: Pose }[], objects: FrameObjectState[], effects?: Frame['effects'][number][]): Frame {
+function makeFrame(actors: { name: string; pose: Pose }[], objects: FrameObjectState[], effects?: { type: 'bang' | 'dust' | string; pos: Vec2 }[]): Frame {
 	return { actors, objects, effects } as Frame;
 }
 
@@ -50,14 +50,14 @@ export function buildThrowScene(text: string, seed = 0): Scene {
 	const A_X = 120;
 	const B_X = 320;
 
-	const catalog = [
-		{ id: 'vase01', type: 'placeholder', w: 16, h: 24, color: '#55c' },
-		{ id: 'vase01_shard1', type: 'placeholder', w: 6, h: 6, color: '#66f' },
-		{ id: 'vase01_shard2', type: 'placeholder', w: 6, h: 6, color: '#66f' },
-		{ id: 'vase01_shard3', type: 'placeholder', w: 6, h: 6, color: '#66f' },
-		{ id: 'vase01_shard4', type: 'placeholder', w: 6, h: 6, color: '#66f' },
-		{ id: 'vase01_shard5', type: 'placeholder', w: 6, h: 6, color: '#66f' },
-		{ id: 'vase01_shard6', type: 'placeholder', w: 6, h: 6, color: '#66f' },
+	const catalog: SceneObject[] = [
+		{ id: 'vase01', type: 'placeholder' as const, w: 16, h: 24, color: '#55c' },
+		{ id: 'vase01_shard1', type: 'placeholder' as const, w: 6, h: 6, color: '#66f' },
+		{ id: 'vase01_shard2', type: 'placeholder' as const, w: 6, h: 6, color: '#66f' },
+		{ id: 'vase01_shard3', type: 'placeholder' as const, w: 6, h: 6, color: '#66f' },
+		{ id: 'vase01_shard4', type: 'placeholder' as const, w: 6, h: 6, color: '#66f' },
+		{ id: 'vase01_shard5', type: 'placeholder' as const, w: 6, h: 6, color: '#66f' },
+		{ id: 'vase01_shard6', type: 'placeholder' as const, w: 6, h: 6, color: '#66f' },
 	];
 
 	const frames: Frame[] = [];
