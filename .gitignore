@@ -1,0 +1,16 @@
+node_modules/
+.pnp.cjs
+.pnp.loader.mjs
+.pnpm-store/
+.DS_Store
+*.log
+.coverage/
+coverage/
+dist/
+build/
+.vite/
+.vscode/
+playwright-report/
+blob-report/
+*.local
+.env*
