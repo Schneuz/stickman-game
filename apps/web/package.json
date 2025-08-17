@@ -1,0 +1,29 @@
+{
+	"name": "@stickman/web",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm -r -F @stickman/schema -F @stickman/engine -F @stickman/patterns build && vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint": "eslint src --ext .ts,.tsx",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"@stickman/schema": "workspace:*",
+		"@stickman/engine": "workspace:*",
+		"@stickman/patterns": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/react": "^18.3.3",
+		"@types/react-dom": "^18.3.0",
+		"typescript": "^5.5.4",
+		"vite": "^5.4.1",
+		"vitest": "^2.0.5",
+		"@vitejs/plugin-react": "^4.3.1"
+	}
+}
